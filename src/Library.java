@@ -51,11 +51,14 @@ public class Library {
                     books.add(book);
                 }
             }
+        // Handle IOException specifically (file not found, file read error)
         } catch (IOException e) {
             System.out.println("An error has occurred while reading teh file: " + e.getMessage());
 
+        // Handle any other unexpected exceptions
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.out.println("An unexpected error occurred.");
+            e.printStackTrace(); // Prints the stack trace to help with debugging.
         }
     }
 
