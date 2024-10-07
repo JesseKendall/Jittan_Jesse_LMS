@@ -1,10 +1,9 @@
 /* Name: Jesse Jittan
 Course: 202510 Software Development I CEN-3024C-14320
-Date: 9/8/2024
+Date: 10/6/2024
 Program Objective:
-The Library class manages the collection of Book objects. It loads books from a .txt file and is able to perform
-additional functionalities. This one is tasked with removing books based on their id and printing out the list of
-books. It encapsulates the logic for managing a collection of Book obj.
+The Library class is responsible for managing the collection of books in the LMS. It will handle functions like loading
+books, adding books, removing books, and checking out or checking in books.
  */
 
 import java.io.BufferedReader;
@@ -15,7 +14,8 @@ import java.util.List;
 
 public class Library {
 
-    // private field that holds the collection of Book objects in the form of a list.
+    // private field variable (called books) that holds Book objects in the form of a list.
+    // It is a collection (list) that stores multiple Book objects in the variable 'books'
     private List<Book> books;
 
     // Constructor that initializes the Library obj. It sets up the books list as an empty ArrayList
@@ -68,7 +68,7 @@ public class Library {
         // the for each loop iterates over each Book obj in the books list, and check one by one to see if it matches the
         //      id provided
         for (Book book : books) {
-            if (book.getID() == id) {
+            if (book.getId() == id) {
                 books.remove(book);
                 return true;
             }
