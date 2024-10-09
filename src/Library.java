@@ -16,16 +16,20 @@ public class Library {
 
     // private field variable (called books) that holds Book objects in the form of a list.
     // It is a collection (list) that stores multiple Book objects in the variable 'books'
+
     private List<Book> books;
 
-    // Constructor that initializes the Library obj. It sets up the books list as an empty ArrayList
-    //Sets every Library instance to an empty list
+    // Constructor that initializes the Library obj. It sets up the books list as an empty ArrayList so you can later
+    //      add, remove, or retrieve books from it.
+    // Sets every new Library instance to an empty list
+
     public Library() {
         this.books = new ArrayList<>();
     }
 
     // Method: Loads books from a text file and adds the books to the library's collection.
     // It takes a String argument that specifies the path to the text file containing the book data.
+
     public void loadBooksFromFile(String fileName) {
         // Try with resources statement - allows the BR to close automatically without using a finally block.
         try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
