@@ -19,7 +19,7 @@ public class LibraryManagementApp {
         // Load books from a .txt file, and populates the Library instance with books from the file.
         library.loadBooksFromFile("src/resources/book_list.txt");
 
-        // Iterates through the list of books and print each book using the overriden toString() method.
+        // Iterates through the list of books and print each book using the override toString() method.
         System.out.println("Books in the library: ");
         for (Book book : library.getBooks()) {
             System.out.println(book);
