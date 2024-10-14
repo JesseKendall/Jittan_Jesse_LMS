@@ -4,6 +4,10 @@ Date: 10/6/2024
 Program Objective:
 The Library class is responsible for managing the collection of books in the LMS. It will handle functions like loading
 books, adding books, removing books, and checking out or checking in books.
+
+I've update the Library to the business logic layer - handles the core functionality of the application and have removed
+all feedback (i.e. print statements) and user interaction from this layer. The Library class doesn’t print anything
+because its job is to manage books, not interact with users. Therefore I have placed the UI Layer in the main class.
  */
 
 import java.io.BufferedReader;
@@ -117,7 +121,7 @@ public class Library {
                 String genre = bookData[4];
                 books.add(new Book(id, isbn, title, author, genre));
             }
-            // If there is a problem (file doesn't exist, can't be accessed, or opened) an IOException will be thrown and
+            // If there is a file related issue (file cannot be found, accessed, or opened) an IOException will be thrown and
             //     caught here 'catch IOException e' and rethrown (passed to the LibraryManagementApp to handle.
         } catch (IOException e) {
             throw e;
