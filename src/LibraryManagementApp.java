@@ -64,7 +64,6 @@ public class LibraryManagementApp {
             System.out.println("4. Check in a book by ID");
             System.out.println("5. Display all books");
             System.out.println("6. Quit");
-        }
 
         // Prompts the user to select an option
         System.out.println("Choose an option: ");
@@ -156,6 +155,7 @@ public class LibraryManagementApp {
             default:
                 System.out.println("Invalid option. Please try again.");
                 break;
+            }
         }
         // Close the scanner
         scanner.close();
