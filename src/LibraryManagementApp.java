@@ -65,11 +65,15 @@ public class LibraryManagementApp {
             System.out.println("5. Display all books");
             System.out.println("6. Quit");
 
+
         // Prompts the user to select an option
         System.out.println("Choose an option: ");
         int option = scanner.nextInt();
         scanner.nextLine();             // Consumes the newline that was generated from hitting enter: /n
 
+        // The switch statement checks the value of an expression and matches it to one of the case values
+        // Each case represents a possible value the expression can take and the code block runs
+        // Works better than multiple if-else statements
         switch (option) {
             case 1:
                 // Add a new book
