@@ -72,7 +72,7 @@ public class Book {
     @Override
     // Overriding the toString() method
     public String toString() {
-        return "ID: " + id + "ISBN: " + isbn + ", Title: " + title + ", Author: " + author +
+        return "ID: " + id + ", ISBN: " + isbn + ", Title: " + title + ", Author: " + author +
                 "Genre: " + genre + "Status: " + (isCheckedOut ? "Checked Out" : "Available");
 
         /* I wanted to notate for myself the acutally turnary operator:(isCheckedOut ? "Checked Out" : "Available")
