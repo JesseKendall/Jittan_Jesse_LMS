@@ -15,7 +15,8 @@ for the user to interact with the application.
 User Interaction Layer (e.g., main Class, UI Controllers): This layer is responsible for interacting with the
 user—taking input and presenting output. This is where print statements (or any user feedback mechanism) typically
 belong, as this is the part of the program designed to communicate with the user.
- */
+ *//*
+
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -24,8 +25,8 @@ public class LibraryManagementApp {
 
     public static void main(String[] args) {
 
-        // Create a Library instance to hold all books
-        Library library = new Library();
+        // Create a library.Library instance to hold all books
+        library.Library library = new library.Library();
 
         // Creates a Scanner obj to read input from the user console (learned, but just wanted it here for my purpose)
         Scanner scanner = new Scanner(System.in);
@@ -95,9 +96,9 @@ public class LibraryManagementApp {
                 String genre = scanner.nextLine();
 
                 // Create the new book and add it to the library
-                Book newBook = new Book(id, isbn, title, author, genre);
+                library.Book newBook = new library.Book(id, isbn, title, author, genre);
                 if (library.addBook(newBook)) {
-                    System.out.println("Book added successfully.");
+                    System.out.println("library.Book added successfully.");
                 } else {
                     System.out.println("Failed to add the book.");
                 }
@@ -110,9 +111,9 @@ public class LibraryManagementApp {
                 scanner.nextLine();  // Consume the newline
 
                 if (library.removeBookById(idToRemove)) {
-                    System.out.println("Book removed successfully.");
+                    System.out.println("library.Book removed successfully.");
                 } else {
-                    System.out.println("Book not found.");
+                    System.out.println("library.Book not found.");
                 }
                 break;
 
@@ -123,7 +124,7 @@ public class LibraryManagementApp {
                 scanner.nextLine();  // Consume the newline
 
                 if (library.checkOutBook(idToCheckOut)) {
-                    System.out.println("Book checked out successfully.");
+                    System.out.println("library.Book checked out successfully.");
                 } else {
                     System.out.println("Unable to check out the book.");
                 }
@@ -136,7 +137,7 @@ public class LibraryManagementApp {
                 scanner.nextLine();  // Consume the newline
 
                 if (library.checkInBook(idToCheckIn)) {
-                    System.out.println("Book checked in successfully.");
+                    System.out.println("library.Book checked in successfully.");
                 } else {
                     System.out.println("Unable to check in the book.");
                 }
@@ -145,15 +146,15 @@ public class LibraryManagementApp {
             case 5:
                 // Display all books
                 System.out.println("\nBooks currently in the library:");
-                for (Book book : library.getAllBooks()) {
-                    System.out.println(book);  // Calls Book's toString method
+                for (library.Book book : library.getAllBooks()) {
+                    System.out.println(book);  // Calls library.Book's toString method
                 }
                 break;
 
             case 6:
                 // Quit the program
                 quit = true;
-                System.out.println("Exiting the Library Management System.");
+                System.out.println("Exiting the library.Library Management System.");
                 break;
 
             default:
@@ -165,4 +166,5 @@ public class LibraryManagementApp {
         scanner.close();
     }
 }
+*/
 

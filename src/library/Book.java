@@ -1,8 +1,8 @@
-/* Name: Jesse Jittan
+package library;/* Name: Jesse Jittan
 Course: 202510 Software Development I CEN-3024C-14320
 Date: 10/6/2024
 Program Objective:
-The Book class is blueprint that represents a single book in the Library Management System. It stores all the info
+The library.Book class is blueprint that represents a single book in the library.Library Management System. It stores all the info
     related to a book such as ID, ISBN, Title, Author, Barcode, genre, and availability status.
  */
 
@@ -72,7 +72,7 @@ public class Book {
     @Override
     // Overriding the toString() method
     public String toString() {
-        return "ID: " + id + "ISBN: " + isbn + ", Title: " + title + ", Author: " + author +
+        return "ID: " + id + ", ISBN: " + isbn + ", Title: " + title + ", Author: " + author +
                 "Genre: " + genre + "Status: " + (isCheckedOut ? "Checked Out" : "Available");
 
         /* I wanted to notate for myself the acutally turnary operator:(isCheckedOut ? "Checked Out" : "Available")
