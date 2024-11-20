@@ -11,9 +11,9 @@ public class LibraryDatabaseHandler {
 
     // Constructor to establish a connection to the DB, it initializes the connection once an instance of the LibraryDatabaseHandler is created.
     // The constructor ensures that whenever an object of LibraryDatabaseHandler is created, the connection to the database is automatically established.
-    public LibraryDatabaseHandler() {
+    public LibraryDatabaseHandler(String dbPath) {
         try {
-            connection = DriverManager.getConnection("jdbc:sqlite:C:/sqlite/library.db");       // Establish a connection to my SQLite DB - w/ a hardcoded path.
+            connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);       // Establish a connection to my SQLite DB - w/ parameter of the path.
             System.out.println("Successfully connected to the database.");                          // Print success message
 
         } catch (
@@ -100,7 +100,7 @@ public class LibraryDatabaseHandler {
         return books;                                                              // Returns the list of books
     }
 
-    // isCheckedOut() checks wiether a specific book is checked out by looking at its status in the database - using bookId as input
+    // isCheckedOut() checks whether a specific book is checked out by looking at its status in the database - using bookId as input
     // If book isCheckedOut - method moves to checkInBook() and updates status in DB
     public boolean isCheckedOut(int id) {
         String query = "SELECT status FROM books WHERE id = ?";

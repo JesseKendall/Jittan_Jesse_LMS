@@ -4,70 +4,93 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 // Text area for displaying book list
 import java.awt.event.ActionListener;
-import java.io.IOException;
+import java.util.List;
 
 import library.Book;
 import library.Library;
+import library.LibraryDatabaseHandler;
 
 public class LibraryManagementGUI extends JFrame {
 
-    private JLabel jlFileName;              // Label for file name
-    private JTextField tfFileName;          // Text field for file name input
-    private JButton loadFileButton;         // Button to load file
     private JPanel MainPanel;               // Main container panel for the GUI, holding all other components
     private JTextArea displayArea;          // Text area for displaying book list
     private JButton displayBooksButton;     // Button to display all books
     private JButton deleteBookById;         // Button to delete book
     private JTextField tfBookId;            // Text field for book id input
     private JLabel jlRemoveBookByID;        // Label for deleting book
-    private JLabel jlCheckInBookByTitle;
-    private JTextField tfCheckInBookTitle;
     private JButton checkInButton;
-    private JLabel jlCheckOutBookByTitle;
-    private JTextField tfCheckOutBookTitle;
     private JButton checkOutButton;
     private JButton exitButton;
+    private JLabel jlAddNewBook;
+    private JTextField tfId;
+    private JTextField tfIsbn;
+    private JTextField tfBookTitle;
+    private JTextField tfBookAuthor;
+    private JTextField tfBookGenre;
+    private JButton addBookButton;
+    private JLabel jlId;
+    private JLabel jlIsbn;
+    private JLabel jlTitle;
+    private JLabel jlAuthor;
+    private JLabel jlGenre;
+    private JTextField tfCheckOutId;
+    private JTextField tfCheckInId;
+    private JLabel jlCheckOutBookById;
+    private JLabel jlCheckInBookById;
 
-    private Library library;                // Library instance for managing books
+    private LibraryDatabaseHandler libraryDatabaseHandler;                // LibraryDatabaseHandler instance for managing books
 
     // Constructor
     public LibraryManagementGUI () {
-        library = new Library();            // Initialize the Library instance
+
+        // creates a new instance of the LibraryDatabaseHandler class, initializes it with the specified database path
+        //      (C:/sqlite/library.db), and assigns it to the variable libraryDatabaseHandler.
+        libraryDatabaseHandler = new LibraryDatabaseHandler("C:/sqlite/library.db");
         setContentPane(MainPanel);
         setTitle("Jesse's Online Library");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(400, 500);
+        setSize(600, 700);
         setLocationRelativeTo(null);
         setVisible(true);
 
-        // Action listener for loading file
-        loadFileButton.addActionListener(new ActionListener() {
+
+        addBookButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String fileName = tfFileName.getText();         // Get the file name from the text field, and stores it in variable fileName
-
                 try {
-                    library.loadBooksFromFile(fileName);        // Calls the loadBooksFromFile method with fileName as the argument
+                    // 1. Read input from text field
+                    int id = Integer.parseInt(tfId.getText().trim());  // Parse ID from the input text field
+                    long isbn = Long.parseLong(tfIsbn.getText().trim()); // Parse ISBN from input
+                    String title = tfBookTitle.getText().trim();                 // Get book title, trimmed of whitespace
+                    String author = tfBookAuthor.getText().trim();               // Get book author entered in the text field
+                    String genre = tfBookGenre.getText().trim();                 // Get book genre
 
-                    // Shows a pop-up dialog box using JOptionPane to inform the user that the books were loaded successfully
-                    // null as the first parameter centers the dialog box on the screen
-                    JOptionPane.showMessageDialog(null, "Books loaded successfully.");
+                    // 2. Create a new Book object with the inputs from the text field
+                    Book newBook = new Book(id, isbn, title, author, genre);
 
-                    // Show the list of books in the GUI's display area as soon as the file is successfully loaded, not necessary but
-                    //      wanted to add it for user experience.
-                    updateDisplayArea();
+                    // 3. Adding the book to the DB using the LibraryDatabaseHandler - passing the newly created newBook obj as the argument - and attempts to add the new book to the DB
+                    if (libraryDatabaseHandler.addBook(newBook)) {
+                        // If DB returns true, show success message
+                        JOptionPane.showMessageDialog(null, "Book added successfully.");
 
-                    // Handles file-related errors such as: File Not Found, Incorrect File Path, Permission Issues, File is Corrupt
-                } catch (IOException ex) {
-                    JOptionPane.showMessageDialog(null, "File could not be loaded: " + ex.getMessage());
+                        // Update the display area
+                        updateDisplayArea(libraryDatabaseHandler.getAllBooks());
 
-                    // Handles errors happen when the program can open the file but finds that the content inside is not formatted
-                    //      or organized the way the program expects (i.e. Missing Info, Wrong Data Type, Field Inconsistencies)
-                } catch (IllegalArgumentException ex) {
-                    JOptionPane.showMessageDialog(null, "Error occurred while trying to read the file: " + ex.getMessage());
+                        // Failure to add book, message to inform user.
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Failed to add book. May already exist.", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch(NumberFormatException ex){
+                        JOptionPane.showMessageDialog(null, "Invalid ID or ISBN. Please enter a valid number to try again.", "Error.", JOptionPane.ERROR_MESSAGE);
+
+                } catch(Exception ex){
+                        JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
+
+
+
 
         deleteBookById.addActionListener(new ActionListener() {
             @Override
@@ -77,8 +100,9 @@ public class LibraryManagementGUI extends JFrame {
                     int idToRemove = Integer.parseInt(tfBookId.getText().trim());
 
                     // Attempt to remove the book by the ID provided
-                    if (library.removeBookById(idToRemove)) {
+                    if (libraryDatabaseHandler.removeBookById(idToRemove)) {
                         JOptionPane.showMessageDialog(null, "Book deleted successfully.");
+                        updateDisplayArea((libraryDatabaseHandler.getAllBooks()));
                     } else {
                         JOptionPane.showMessageDialog(null, "Book not found.");
                     }
@@ -87,6 +111,8 @@ public class LibraryManagementGUI extends JFrame {
                 // REMEMBER: the catch block is outside the try block thus } closing curly brackets should end the if-else statement and begin the catch block.
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(null, "Invalid ID. Please enter a valid number", "Error", JOptionPane.ERROR_MESSAGE);
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -94,13 +120,19 @@ public class LibraryManagementGUI extends JFrame {
         checkInButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String title = tfCheckInBookTitle.getText().trim();     // Get the book title from text field and trim() whitespace
+                try {
+                    int id = Integer.parseInt(tfCheckInId.getText().trim());
 
-                // Attempting to check in book by title
-                if (library.checkInBookByTitle(title)) {
-                    JOptionPane.showMessageDialog(null, "Book checked in.");
-                } else {
-                    JOptionPane.showMessageDialog(null, "Book not found or already checked in.", "Error", JOptionPane.ERROR_MESSAGE);
+                    // Attempting to check in book by ID
+                    if (libraryDatabaseHandler.checkInBook(id)) {
+                        JOptionPane.showMessageDialog(null, "Book checked in successfully.");
+                        updateDisplayArea(libraryDatabaseHandler.getAllBooks());
+
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Book not found or already checked in.", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch (NumberFormatException ex) {
+                        JOptionPane.showMessageDialog(null, "Invalid ID, Please enter a valid number.", "Error: ", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -108,15 +140,20 @@ public class LibraryManagementGUI extends JFrame {
         checkOutButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String title = tfCheckOutBookTitle.getText().trim();    // Get the book title from text field and trim() whitespace
+                try {
+                    int id = Integer.parseInt(tfCheckOutId.getText().trim());    // Get the book ID from text field and trim() whitespace
 
-                // Attempting to check in book by title
-                if (library.checkOutBookByTitle(title)) {
-                    JOptionPane.showMessageDialog(null, "Book checked out successfully.");
-                } else {
-                    JOptionPane.showMessageDialog(null, "Book not found or already checked out.", "Error", JOptionPane.ERROR_MESSAGE);
+                    // Attempting to check in book by title
+                    if (libraryDatabaseHandler.checkOutBook(id)) {
+                        JOptionPane.showMessageDialog(null, "Book checked out successfully.");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Book not found or already checked out.", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "Invalid ID. Please enter a valid number.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
+
         });
 
         // Button to display all books in the GUI
@@ -125,12 +162,14 @@ public class LibraryManagementGUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                // Check if there are any books to display
-                if (library.getAllBooks().isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "No books available to display.", "Info", JOptionPane.INFORMATION_MESSAGE);
-                } else {
-                    updateDisplayArea();
-                    JOptionPane.showMessageDialog(null, "Displaying all books.", "Info", JOptionPane.INFORMATION_MESSAGE);
+                try {
+                    if (libraryDatabaseHandler.getAllBooks().isEmpty()) {
+                        JOptionPane.showMessageDialog(null, "No books available to display.", "Info", JOptionPane.INFORMATION_MESSAGE);
+                    } else {
+                        updateDisplayArea(libraryDatabaseHandler.getAllBooks());
+                    }
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Failed to retrieve books: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -150,13 +189,13 @@ public class LibraryManagementGUI extends JFrame {
     }
 
     /* New Method: Update Display Area
-        - Retrieve the list of all books in the Library
+        - Retrieve the list of all books in the Database (List<Book> as the argument
         - Formats that list as a single string (StringBuilder named bookList) w each book on a new line
         - Displays this formatted string in a text area (displayArea)
      */
-    private void updateDisplayArea() {
+    private void updateDisplayArea(List<Book> books) {
         StringBuilder bookList = new StringBuilder();
-        for (Book book : library.getAllBooks()) {
+        for (Book book : books) {
             bookList.append(book.toString()).append("\n");      // toString() called on each Book obj, \n adds a newline after each book's details
                                                                 //      and appends (adds) that to the bookList StringBuilder.
         }
