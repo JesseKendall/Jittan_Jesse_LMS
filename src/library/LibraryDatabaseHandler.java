@@ -41,9 +41,9 @@ public class LibraryDatabaseHandler {
             pstmt.setString(3, book.getTitle());
             pstmt.setString(4, book.getAuthor());
             pstmt.setString(5, book.getGenre());
-            pstmt.executeUpdate();                                      // Executes the INSERT query
 
-            return true;                                                // Indicates that the book was added successfully (returns to GUI class)
+            return pstmt.executeUpdate() > 0;                          // Executes the INSERT query and returns the # of rows affected (pstmt.executeUpdate()) then returns true or false.
+
 
         } catch (SQLException e) {
             System.err.println("Adding book failed: " + e.getMessage());
@@ -82,7 +82,7 @@ public class LibraryDatabaseHandler {
         try (Statement stmt = connection.createStatement();                     // First Res: Prepares the SQL query - Creates a Statement object to execute SQL queries.
              ResultSet rs = stmt.executeQuery(query)) {                          // Second Res: Executes the SQL query (SELECT * FROM books) and returns the results as a ResultSet.
 
-            //      The ResultSet object (rs) contains the rows returned by the query.
+            // The ResultSet object (rs) contains the rows returned by the query.
             // Iterates through the result set and add books to the list (Retrieves the value of a specific column in the current row (i.e. rs.getX(columnName))
             while (rs.next()) {
                 books.add(new Book(
@@ -90,7 +90,8 @@ public class LibraryDatabaseHandler {
                         rs.getLong("isbn"),
                         rs.getString("title"),
                         rs.getString("author"),
-                        rs.getString("genre")
+                        rs.getString("genre"),
+                        rs.getString("status")
                 ));
             }
         } catch (SQLException e) {
@@ -154,7 +155,7 @@ public class LibraryDatabaseHandler {
 
     // Checks out a book by updating its status and due date.
     public boolean checkOutBook(int id) {
-        String query = "UPDATE books SET status = 'Checked Out', due_date = date('now', '+14 days') " + "WHERE id = ? AND status = 'Available'";        // Specifies the SQL query to update the book's status and due_date in the database.
+        String query = "UPDATE books SET status = 'Checked Out', due_date = date('now', '+28 days') " + "WHERE id = ? AND status = 'Available'";        // Specifies the SQL query to update the book's status and due_date in the database.
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
 
             pstmt.setInt(1, id);                    // Replaces the 1 (?) placeholder with the actual value passed in.
@@ -173,7 +174,7 @@ public class LibraryDatabaseHandler {
     // Closes the DB connection when not in use or no longer needed
     public void closeConnection() {
         try {
-            if (connection != null) {
+            if (connection != null && !connection.isClosed()) {
                 connection.close();
                 System.out.println("Database connection closed.");
             }

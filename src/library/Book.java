@@ -12,10 +12,11 @@ public class Book {
     private String title;
     private String author;
     private String genre;
-    private boolean isCheckedOut; // Tracks the status of books checked out or checked in
+    private String status;              // Added this line: Reflects the database status i.e. Available or Checked Out
+    private boolean isCheckedOut;       // Tracks the status of books checked out or checked in
 
     // Constructor
-    public Book(int id, long isbn, String title, String author, String genre) {
+    public Book(int id, long isbn, String title, String author, String genre, String status) {
 
         this.id = id;
 
@@ -30,7 +31,9 @@ public class Book {
         this.title = title;
         this.author = author;
         this.genre = genre;
-        this.isCheckedOut = false; // Initialized as available (not checked out/checked In = true)
+        this.status = status;                                           // Updated
+
+        this.isCheckedOut = "Checked Out".equalsIgnoreCase(status);     // Updated: Set isCheckedOut based on the initial status
     }
 
     // Getter methods are accessors that allow other classes to 'access' the private field variables
@@ -55,6 +58,16 @@ public class Book {
         return genre;
     }
 
+    // Added in module 9 for Database: Getter and Setter for Status
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+        this.isCheckedOut = "Checked Out".equalsIgnoreCase(status);
+    }
+
     public boolean isCheckedOut() {
         return isCheckedOut;
    }
@@ -69,21 +82,10 @@ public class Book {
         isCheckedOut = false;
    }
 
+    // Updated toString
     @Override
-    // Overriding the toString() method
     public String toString() {
         return "ID: " + id + ", ISBN: " + isbn + ", Title: " + title + ", Author: " + author +
-                "Genre: " + genre + "Status: " + (isCheckedOut ? "Checked Out" : "Available");
-
-        /* I wanted to notate for myself the acutally turnary operator:(isCheckedOut ? "Checked Out" : "Available")
-        and how it works.
-        if (isCheckedOut) {
-            return "Checked Out';
-        } else {
-            return "Available";
-
-        If isCheckedOut is true - the statement in the curly braces will execute - since if statement conditions have
-        to be true in order to execute. If isCheckedOut is false, the else block executes.
-         */
+                ", Genre: " + genre + ", Status: " + status;
     }
 }

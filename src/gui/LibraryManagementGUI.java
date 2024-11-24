@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
 import java.util.List;
 
 import library.Book;
-import library.Library;
+// import library.Library;
 import library.LibraryDatabaseHandler;
 
 public class LibraryManagementGUI extends JFrame {
@@ -64,9 +64,10 @@ public class LibraryManagementGUI extends JFrame {
                     String title = tfBookTitle.getText().trim();                 // Get book title, trimmed of whitespace
                     String author = tfBookAuthor.getText().trim();               // Get book author entered in the text field
                     String genre = tfBookGenre.getText().trim();                 // Get book genre
+                    String status = "Available";
 
                     // 2. Create a new Book object with the inputs from the text field
-                    Book newBook = new Book(id, isbn, title, author, genre);
+                    Book newBook = new Book(id, isbn, title, author, genre, status);
 
                     // 3. Adding the book to the DB using the LibraryDatabaseHandler - passing the newly created newBook obj as the argument - and attempts to add the new book to the DB
                     if (libraryDatabaseHandler.addBook(newBook)) {
@@ -75,6 +76,8 @@ public class LibraryManagementGUI extends JFrame {
 
                         // Update the display area
                         updateDisplayArea(libraryDatabaseHandler.getAllBooks());
+
+                        // Clear text field by calling the helper method clearTextFields()
 
                         // Failure to add book, message to inform user.
                     } else {
@@ -88,9 +91,6 @@ public class LibraryManagementGUI extends JFrame {
                 }
             }
         });
-
-
-
 
         deleteBookById.addActionListener(new ActionListener() {
             @Override
@@ -146,14 +146,19 @@ public class LibraryManagementGUI extends JFrame {
                     // Attempting to check in book by title
                     if (libraryDatabaseHandler.checkOutBook(id)) {
                         JOptionPane.showMessageDialog(null, "Book checked out successfully.");
+
+                        // Refresh the display area with the current information
+                        updateDisplayArea(libraryDatabaseHandler.getAllBooks());
+
                     } else {
                         JOptionPane.showMessageDialog(null, "Book not found or already checked out.", "Error", JOptionPane.ERROR_MESSAGE);
                     }
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(null, "Invalid ID. Please enter a valid number.", "Error", JOptionPane.ERROR_MESSAGE);
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Error: " +ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
-
         });
 
         // Button to display all books in the GUI
@@ -179,15 +184,17 @@ public class LibraryManagementGUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 int response = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "Confirm Exit", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
-                if (response == JOptionPane.YES_OPTION) {
-                    System.exit(0);             // Closes and exits the app
-                } else {
-                    JOptionPane.showMessageDialog(null, "Exit canceled. You can continue.");
+                if (response == JOptionPane.YES_OPTION) {                  // if the if statement evaluates to false, the program continues to run.
+
+                    libraryDatabaseHandler.closeConnection();              // Close the database connection
+
+                    System.exit(0);                                 // Exits the application
                 }
             }
         });
     }
 
+    // ***VERY IMPORTANT REMINDER: The updateDisplayArea() method is a separate method that belongs to the LibraryManagementGUI class, not the constructor.
     /* New Method: Update Display Area
         - Retrieve the list of all books in the Database (List<Book> as the argument
         - Formats that list as a single string (StringBuilder named bookList) w each book on a new line
@@ -202,7 +209,18 @@ public class LibraryManagementGUI extends JFrame {
         displayArea.setText(bookList.toString());
     }
 
+    // A parameterized clear field method that allows specific buttons to clear - unique to each button's text field.
+    // Allows each button to only clear the fields it interacts with.
+    private void clearTextFields(JTextField... fields) {
+        for (JTextField field : fields) {
+            field.setText("");                                  // Clear each field passed as an argument
+        }
+    }
+
     public static void main(String[] args) {
         new LibraryManagementGUI();
     }
 }
+
+
+

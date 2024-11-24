@@ -1,4 +1,6 @@
-package library;/* Name: Jesse Jittan
+/*
+package library;*/
+/* Name: Jesse Jittan
 Course: 202510 Software Development I CEN-3024C-14320
 Date: 10/6/2024
 Program Objective:
@@ -8,7 +10,8 @@ books, adding books, removing books, and checking out or checking in books.
 I've update the library.Library to the business logic layer - handles the core functionality of the application and have removed
 all feedback (i.e. print statements) and user interaction from this layer. The library.Library class doesn’t print anything
 because its job is to manage books, not interact with users. Therefore I have placed the UI Layer in the main class.
- */
+ *//*
+
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -174,3 +177,4 @@ public class Library {
 
 
 
+*/
