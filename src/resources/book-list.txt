@@ -1,0 +1,30 @@
+1,9780061120084,To Kill a Mockingbird,Harper Lee,Fiction
+2,9780451524935,1984,George Orwell,Dystopian
+3,9780743273565,The Great Gatsby,F. Scott Fitzgerald,Classic
+4,9780316769488,The Catcher in the Rye,J.D. Salinger,Fiction
+5,9781503290563,Pride and Prejudice,Jane Austen,Romance
+6,9780544003415,The Lord of the Rings,J.R.R. Tolkien,Fantasy
+7,9781451635621,Gone with the Wind,Margaret Mitchell,Historical Fiction
+8,9781503280786,Moby Dick,Herman Melville,Adventure
+9,9780143039433,The Grapes of Wrath,John Steinbeck,Fiction
+10,9780486280615,The Adventures of Huckleberry Finn,Mark Twain,Adventure
+11,9780060850524,Brave New World,Aldous Huxley,Dystopian
+12,9780380730407,The Alchemist,Paulo Coelho,Fiction
+13,9780141439600,Wuthering Heights,Emily Brontë,Romance
+14,9780140186390,Heart of Darkness,Joseph Conrad,Classic
+15,9780385504201,The Da Vinci Code,Dan Brown,Thriller
+16,9780140283297,Of Mice and Men,John Steinbeck,Fiction
+17,9780316769174,Franny and Zooey,J.D. Salinger,Fiction
+18,9780140449266,Crime and Punishment,Fyodor Dostoevsky,Classic
+19,9780439064873,Harry Potter and the Chamber of Secrets,J.K. Rowling,Fantasy
+20,9780307277671,The Road,Cormac McCarthy,Dystopian
+21,9780061122415,One Hundred Years of Solitude,Gabriel Garcia Marquez,Fiction
+22,9780545139700,The Hunger Games,Suzanne Collins,Young Adult
+23,9780553213119,Dracula,Bram Stoker,Horror
+24,9780141439556,Jane Eyre,Charlotte Brontë,Romance
+25,9780142424179,The Fault in Our Stars,John Green,Young Adult
+26,9780451532084,The Scarlet Letter,Nathaniel Hawthorne,Classic
+27,9780553386790,The Handmaid's Tale,Margaret Atwood,Dystopian
+28,9780141439822,Great Expectations,Charles Dickens,Classic
+29,9781451673319,Fahrenheit 451,Ray Bradbury,Science Fiction
+30,9780060838676,Life of Pi,Yann Martel,Adventure
